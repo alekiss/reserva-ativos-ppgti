@@ -1,0 +1,17 @@
+@use './../../styles/variables' as *;
+
+.sidebar {
+  width: 240px;
+  transition: width 0.3s;
+  background-color: $dark-green;
+  border: 5px solid red !important;
+
+
+  &.collapsed {
+    width: 80px;
+
+    .MuiListItemText-root {
+      display: none;
+    }
+  }
+}
