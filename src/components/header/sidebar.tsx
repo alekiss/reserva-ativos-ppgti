@@ -13,7 +13,6 @@ import {
   CalendarMonth,
 } from "@mui/icons-material";
 import "./sidebar.scss";
-import { colors } from "../../styles/variables";
 import { Link } from "react-router-dom";
 
 type SidebarProps = {
@@ -47,7 +46,7 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
         width: collapsed ? 65 : 240,
         "& .MuiDrawer-paper": {
           marginTop: "64px",
-          backgroundColor: colors.darkGreen,
+          backgroundColor: "primary.main",
           width: collapsed ? 65 : 240,
           overflowX: "hidden",
           cursor: "pointer",

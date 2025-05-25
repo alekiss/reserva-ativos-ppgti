@@ -3,7 +3,7 @@ import logoIFPB from "../../assets/logo-ifpb.png";
 import logoPPGTI from "../../assets/logo-ppgti.png";
 import "./styles.scss";
 
-const RedirectLogin = () => {
+const Login = () => {
   return (
     <div className="wrapper">
       <div className="logos">
@@ -19,4 +19,4 @@ const RedirectLogin = () => {
   );
 };
 
-export default RedirectLogin;
+export default Login;
