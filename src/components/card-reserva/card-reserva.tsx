@@ -31,7 +31,6 @@ const CardReserva = ({
         boxShadow: 3,
         borderRadius: 2,
         overflow: "hidden",
-        mt: 10,
       }}
     >
       <CardMedia

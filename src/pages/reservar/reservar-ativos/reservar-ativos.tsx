@@ -12,6 +12,7 @@ import CardReserva from "../../../components/card-reserva/card-reserva";
 import { useState } from "react";
 import ModalConfirmar from "../../../components/modal-confirmar/modal-confirmar";
 import { termoAtivos } from "../../../utils/termo";
+import SearchIcon from "@mui/icons-material/Search";
 
 const ReservarAtivos = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -104,17 +105,20 @@ const ReservarAtivos = () => {
             variant="contained"
             fullWidth
             sx={{ padding: 1 }}
+            startIcon={<SearchIcon />}
           >
             PESQUISAR
           </Button>
         </Box>
-        <CardReserva
-          imagem="https://www.iq.harvard.edu/sites/projects.iq.harvard.edu/files/styles/os_files_xlarge/public/harvard-iqss/files/k301_01.png?m=1714725215&itok=IGS1ojuR"
-          titulo="Máquina 1"
-          subtitulo="Código: 123456"
-          localizacao="Laboratório de Redes Convergentes"
-          onSelecionar={handleSelecionar}
-        />
+        <Box mt={10}>
+          <CardReserva
+            imagem="https://www.iq.harvard.edu/sites/projects.iq.harvard.edu/files/styles/os_files_xlarge/public/harvard-iqss/files/k301_01.png?m=1714725215&itok=IGS1ojuR"
+            titulo="Máquina 1"
+            subtitulo="Código: 123456"
+            localizacao="Laboratório de Redes Convergentes"
+            onSelecionar={handleSelecionar}
+          />
+        </Box>
       </Box>
 
       <ModalConfirmar
