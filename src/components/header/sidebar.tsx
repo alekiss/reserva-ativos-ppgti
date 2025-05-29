@@ -55,7 +55,7 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
     >
       <List>
         {navItems.map((item) => (
-          <Link to={item.path}>
+          <Link to={item.path} key={item.path}>
             <ListItem
               component="button"
               key={item.text}
