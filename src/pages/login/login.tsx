@@ -12,7 +12,7 @@ const Login = () => {
       </div>
       <h1>Reserva de Ativos</h1>
       <p>Faça login com SUAP</p>
-      <Link to="/home">
+       <Link to="/reservar"> {/*Depois trocar para a /home */}
         <button>ENTRAR COM SUAP</button>
       </Link>
     </div>

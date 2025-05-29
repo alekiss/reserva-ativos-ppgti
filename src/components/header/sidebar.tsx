@@ -4,6 +4,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Tooltip,
 } from "@mui/material";
 import {
   Home,
@@ -12,7 +13,6 @@ import {
   DomainVerificationSharp,
   CalendarMonth,
 } from "@mui/icons-material";
-import "./sidebar.scss";
 import { Link } from "react-router-dom";
 
 type SidebarProps = {
@@ -21,21 +21,29 @@ type SidebarProps = {
 
 const Sidebar = ({ collapsed }: SidebarProps) => {
   const navItems = [
-    { text: "Home", icon: <Home sx={{ color: "white" }} />, path: "/home" },
+    {
+      text: "Home",
+      icon: <Home sx={{ color: "white" }} />,
+      path: "/home",
+      disabled: true,
+    },
     {
       text: "Reservar",
       icon: <Event sx={{ color: "white" }} />,
       path: "/reservar",
+      disabled: false,
     },
     {
       text: "Minhas Reservas",
       icon: <CalendarMonth sx={{ color: "white" }} />,
       path: "/minhas-reservas",
+      disabled: false,
     },
     {
       text: "Check In/Out",
       icon: <DomainVerificationSharp sx={{ color: "white" }} />,
       path: "/check-in-out",
+      disabled: true,
     },
   ];
 
@@ -45,47 +53,70 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
       sx={{
         width: collapsed ? 65 : 240,
         "& .MuiDrawer-paper": {
-          marginTop: "64px",
+          paddingTop: "64px",
           backgroundColor: "primary.main",
           width: collapsed ? 65 : 240,
           overflowX: "hidden",
-          cursor: "pointer",
         },
       }}
     >
       <List>
-        {navItems.map((item) => (
-          <Link to={item.path}>
+        {navItems.map((item) => {
+          const content = (
             <ListItem
-              component="button"
               key={item.text}
               sx={{
                 backgroundColor: "transparent",
                 color: "white",
                 border: "none",
-                cursor: "pointer",
+                cursor: item.disabled ? "not-allowed" : "pointer",
+                opacity: item.disabled ? 0.5 : 1,
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                },
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               {!collapsed && <ListItemText primary={item.text} />}
             </ListItem>
-          </Link>
-        ))}
-        <ListItem
-          component="button"
-          key="logout"
-          sx={{
-            backgroundColor: "transparent",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          <ListItemIcon>
-            <ExitToApp sx={{ color: "white" }} />
-          </ListItemIcon>
-          {!collapsed && <ListItemText primary="Sair" />}
-        </ListItem>
+          );
+
+          return item.disabled ? (
+            <Tooltip title="Funcionalidade em breve" key={item.text}>
+              <span>{content}</span>
+            </Tooltip>
+          ) : (
+            <Link
+              to={item.path}
+              key={item.text}
+              style={{ textDecoration: "none" }}
+            >
+              {content}
+            </Link>
+          );
+        })}
+
+        <Tooltip title="Funcionalidade em breve">
+          <span>
+            <ListItem
+              sx={{
+                backgroundColor: "transparent",
+                color: "white",
+                border: "none",
+                cursor: "not-allowed",
+                opacity: 0.5,
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                },
+              }}
+            >
+              <ListItemIcon>
+                <ExitToApp sx={{ color: "white" }} />
+              </ListItemIcon>
+              {!collapsed && <ListItemText primary="Sair" />}
+            </ListItem>
+          </span>
+        </Tooltip>
       </List>
     </Drawer>
   );

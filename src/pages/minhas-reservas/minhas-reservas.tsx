@@ -1,37 +1,39 @@
 import { useEffect, useState } from "react";
-import { Container, Typography, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import {
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Button,
+  Box,
+} from "@mui/material";
+import { CalendarMonth } from "@mui/icons-material";
 import { Reserva } from "../../types/reserva";
-// import ReservaItem from "../../components/reserva-item/reserva-item";
-
-// const reservasMock: Reserva[] = [
-//   {
-//     id: 1,
-//     data: "2023-10-01",
-//     horaInicio: "10:00",
-//     horaFim: "12:00",
-//     tipo: "Sala de Reunião",
-//     local: "Sala A",
-//     imagem: "https://www.iq.harvard.edu/sites/projects.iq.harvard.edu/files/styles/os_files_xlarge/public/harvard-iqss/files/k301_01.png?m=1714725215&itok=IGS1ojuR"
-//   },
-//   {
-//     id: 2,
-//     data: "2023-10-02",
-//     horaInicio: "14:00",
-//     horaFim: "16:00",
-//     tipo: "Auditório",
-//     local: "Auditório Principal",
-//     imagem: "https://www.iq.harvard.edu/sites/projects.iq.harvard.edu/files/styles/os_files_xlarge/public/harvard-iqss/files/k301_01.png?m=1714725215&itok=IGS1ojuR"
-//   }
-// ];
+import ReservaItem from "../../components/reserva-item/reserva-item";
+import { getMinhasReservas } from "../../services/reserva-service";
+import { toast } from "react-toastify";
+import AddIcon from '@mui/icons-material/Add';
+import { useNavigate } from "react-router-dom";
 
 const MinhasReservas = () => {
-  // const [reservas, setReservas] = useState<Reserva[]>(reservasMock);
-  const [reservaSelecionada] = useState<Reserva | null>(null); //Adicionar depois o setReservaSelecionada
+  const [reservas, setReservas] = useState<Reserva[]>([]);
+  // const [reservaSelecionada, setReservaSelecionada] = useState<Reserva | null>(
+  //   null
+  // );
   const [modalCancelarAberto, setModalCancelarAberto] = useState(false);
+  const navigate = useNavigate();
 
-  const carregarReservas = async () => {
-    // const data = await getReservas();
-    // setReservas(data);
+  useEffect(() => {
+    fetchReservas();
+  }, []);
+
+  const fetchReservas = async () => {
+    try {
+      const response = await getMinhasReservas();
+      setReservas(response.data.conteudo);
+    } catch {
+      toast.error("Erro ao buscar salas");
+    }
   };
 
   // const handleCancelar = (reserva: Reserva) => {
@@ -39,43 +41,67 @@ const MinhasReservas = () => {
   //   setModalCancelarAberto(true);
   // };
 
-  const confirmarCancelamento = async () => {
-    if (reservaSelecionada) {
-      // await cancelarReserva(reservaSelecionada.id);
-      // setModalCancelarAberto(false);
-      // await carregarReservas();
-    }
-  };
+  // const confirmarCancelamento = async () => {
+  //   if (reservaSelecionada) {
+  //     await cancelarReserva(reservaSelecionada.id);
+  //     setModalCancelarAberto(false);
+  //     await carregarReservas();
+  //   }
+  // };
 
   // const handleEditar = (reserva: Reserva) => {
   //   // Exibir painel lateral ou navegação para edição
   //   console.log("Editar reserva:", reserva);
   // };
 
-  useEffect(() => {
-    carregarReservas();
-  }, []);
+  const handleIrParaMinhasReservas = () => {
+    navigate("/reservar");
+  };
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h5" gutterBottom>Minhas Reservas</Typography>
-      {/* {reservas.map((reserva) => (
-        <ReservaItem
-          key={reserva.id}
-          reserva={reserva}
-          onCancelar={handleCancelar}
-          onEditar={handleEditar}
-        />
-      ))} */}
+    <Box p={4}>
+      <Box display="flex" alignItems="center" mb={4}>
+        <CalendarMonth sx={{ mr: 1 }} />
+        <Typography variant="h5">Minhas Reservas</Typography>
+      </Box>
 
-      <Dialog open={modalCancelarAberto} onClose={() => setModalCancelarAberto(false)}>
-        <DialogTitle>Confirmar cancelamento?</DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setModalCancelarAberto(false)}>Fechar</Button>
-          <Button color="error" onClick={confirmarCancelamento}>Cancelar Reserva</Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={2}
+        maxWidth="800px"
+        mx="auto"
+      >
+        {reservas.map((reserva) => (
+          <ReservaItem key={reserva.id} reserva={reserva} />
+        ))}
+
+        <Dialog
+          open={modalCancelarAberto}
+          onClose={() => setModalCancelarAberto(false)}
+        >
+          <DialogTitle>Confirmar cancelamento?</DialogTitle>
+          <DialogActions>
+            <Button onClick={() => setModalCancelarAberto(false)}>
+              Fechar
+            </Button>
+            <Button color="error" onClick={() => {}}>
+              Cancelar Reserva
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Box mt={2}>
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={handleIrParaMinhasReservas}
+          >
+            NOVA RESERVA
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

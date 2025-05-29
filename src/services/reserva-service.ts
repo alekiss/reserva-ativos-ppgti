@@ -1,12 +1,12 @@
 import { DataReserva } from "../types/reserva";
 import api from "./api";
 
-export const getReservasID = () =>
-  api.get(`/v1/reservas/4d22ecff-a879-4144-b866-1bf3d34cde3e`); //Deixar o ID dinâmico.
+export const getMinhasReservas = () =>
+  api.get(`/v1/reservas/usuario/historico`);
 
-export const postReserva = (data: DataReserva) => api.post("/reservas", data);
+export const postReserva = (data: DataReserva) => api.post("/v1/reservas", data);
 
-export const deleteReserva = (id: string) => api.delete(`/reservas/${id}`);
+export const deleteReserva = (id: string) => api.delete(`/v1/reservas/${id}`);
 
 export const getSalas = () => api.get("/v1/ativos/salas");
 
