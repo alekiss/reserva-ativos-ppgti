@@ -14,6 +14,7 @@ interface CardReservaProps {
   subtitulo: string;
   localizacao: string;
   onSelecionar?: () => void;
+  mostrarBotaoSelecionar?: boolean;
 }
 
 const CardReserva = ({
@@ -22,6 +23,7 @@ const CardReserva = ({
   subtitulo,
   localizacao,
   onSelecionar,
+  mostrarBotaoSelecionar = true,
 }: CardReservaProps) => {
   return (
     <Card
@@ -31,6 +33,7 @@ const CardReserva = ({
         boxShadow: 3,
         borderRadius: 2,
         overflow: "hidden",
+        minHeight: 150,
       }}
     >
       <CardMedia
@@ -53,14 +56,13 @@ const CardReserva = ({
           </Typography>
         </CardContent>
 
-        <CardActions sx={{ justifyContent: "flex-end", pr: 2, pb: 2 }}>
-          <Button
-            variant="contained"
-            onClick={onSelecionar}
-          >
-            SELECIONAR
-          </Button>
-        </CardActions>
+        {mostrarBotaoSelecionar && (
+          <CardActions sx={{ justifyContent: "flex-end", pr: 2, pb: 2 }}>
+            <Button variant="contained" onClick={onSelecionar}>
+              SELECIONAR
+            </Button>
+          </CardActions>
+        )}
       </Box>
     </Card>
   );
