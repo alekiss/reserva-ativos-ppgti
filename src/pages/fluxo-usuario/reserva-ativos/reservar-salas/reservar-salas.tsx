@@ -6,18 +6,18 @@ import {
   Typography,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import CardReserva from "../../../components/card-reserva/card-reserva";
+import CardReserva from "../../../../components/card-reserva/card-reserva";
 import { useState } from "react";
-import ModalConfirmar from "../../../components/modals/modal-confirmar";
-import { termoAtivos } from "../../../utils/termo";
+import ModalConfirmar from "../../../../components/modals/modal-confirmar";
+import { termoEquipamentos } from "../../../../utils/termo";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchIcon from "@mui/icons-material/Search";
 import { toast } from "react-toastify";
 import {
   getSalasDisponiveis,
   postReserva,
-} from "../../../services/reserva-service";
-import { Sala } from "../../../types/salas";
+} from "../../../../services/reserva-service";
+import { Sala } from "../../../../types/salas";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
@@ -152,11 +152,6 @@ const ReservarSalas = () => {
 
   return (
     <Box p={4}>
-      <Box display="flex" alignItems="center" mb={5}>
-        <CalendarMonthIcon sx={{ mr: 1 }} />
-        <Typography variant="h5">Reserva de Salas</Typography>
-      </Box>
-
       <Box
         display="flex"
         flexDirection="column"
@@ -164,6 +159,10 @@ const ReservarSalas = () => {
         maxWidth="800px"
         mx="auto"
       >
+        <Box display="flex" alignItems="center" mb={3}>
+          <CalendarMonthIcon sx={{ mr: 1 }} />
+          <Typography variant="h5">Reserva de Salas</Typography>
+        </Box>
         <TextField
           label="Dia"
           type="date"
@@ -175,6 +174,11 @@ const ReservarSalas = () => {
           slotProps={{
             inputLabel: {
               shrink: true,
+            },
+            input: {
+              inputProps: {
+                min: new Date().toISOString().split("T")[0],
+              },
             },
           }}
         />
@@ -266,7 +270,7 @@ const ReservarSalas = () => {
         open={openModal}
         onClose={handleCloseModal}
         onConfirm={handleConfirmarTermo}
-        termo={termoAtivos}
+        termo={termoEquipamentos}
       />
     </Box>
   );

@@ -19,10 +19,10 @@ export const getSalasDisponiveis = (
     `/v1/ativos/salas/disponiveis?dia=${dia}&horaInicio=${horaInicio}&horaFim=${horaFim}`
   );
 
-export const getAtivos = (salaId: string) =>
+export const getEquipamentos = (salaId: string) =>
   api.get(`/v1/ativos/equipamentos?salaId=${salaId}page=0&size=20`);
 
-export const getAtivosDisponiveis = (
+export const getEquipamentosDisponiveis = (
   dia: string,
   salaId: string,
   horaInicio: string,

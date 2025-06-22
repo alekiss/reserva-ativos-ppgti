@@ -7,45 +7,40 @@ import {
   ListItemText,
   Tooltip,
 } from "@mui/material";
-import {
-  Home,
-  Event,
-  ExitToApp,
-  CalendarMonth,
-  DomainVerificationSharp,
-} from "@mui/icons-material";
+import { Home, ExitToApp, AddCircle, ListAlt, PersonAddAlt1, ManageAccounts } from "@mui/icons-material";
 import { Link, matchPath, useLocation } from "react-router-dom";
 
-type SidebarProps = {
+type SidebarAdminProps = {
   collapsed: boolean;
 };
 
-const Sidebar = ({ collapsed }: SidebarProps) => {
+const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
   const { pathname } = useLocation();
 
   const navItems = [
+    { text: "Home", icon: Home, path: "/home", disabled: true },
     {
-      text: "Home",
-      icon: <Home />,
-      path: "/home",
+      text: "Cadastro de Ativos",
+      icon: AddCircle,
+      path: "/cadastrar-ativos",
+      disabled: false,
+    },
+    {
+      text: "Gestão de Ativos",
+      icon: ListAlt,
+      path: "/gestao-ativos",
+      disabled: false,
+    },
+    {
+      text: "Cadastro de Usuários",
+      icon: PersonAddAlt1,
+      path: "/cadastro-usuarios",
       disabled: true,
     },
     {
-      text: "Reservar",
-      icon: <Event />,
-      path: "/reservar-ativos",
-      disabled: false,
-    },
-    {
-      text: "Minhas Reservas",
-      icon: <CalendarMonth />,
-      path: "/minhas-reservas",
-      disabled: false,
-    },
-    {
-      text: "Check In/Out",
-      icon: <DomainVerificationSharp />,
-      path: "/check-in-out",
+      text: "Gestão de Usuários",
+      icon: ManageAccounts,
+      path: "/gestao-usuarios",
       disabled: true,
     },
   ];
@@ -73,6 +68,7 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
         <List>
           {navItems.map((item) => {
             const active = isActive(item.path);
+            const Icon = item.icon;
 
             const listItem = (
               <ListItemButton
@@ -117,7 +113,9 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
                   },
                 }}
               >
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon>
+                  <Icon fontSize="medium" />
+                </ListItemIcon>
 
                 <ListItemText
                   primary={item.text}
@@ -214,4 +212,4 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
   );
 };
 
-export default Sidebar;
+export default SidebarAdmin;

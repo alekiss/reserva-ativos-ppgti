@@ -8,12 +8,13 @@ import {
   Box,
 } from "@mui/material";
 import { CalendarMonth } from "@mui/icons-material";
-import { Reserva } from "../../types/reserva";
-import ReservaItem from "../../components/reserva-item/reserva-item";
-import { getMinhasReservas } from "../../services/reserva-service";
+import { Reserva } from "../../../types/reserva";
+import ReservaItem from "../../../components/reserva-item/reserva-item";
+import { getMinhasReservas } from "../../../services/reserva-service";
 import { toast } from "react-toastify";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../../components/loading/loading";
 
 const MinhasReservas = () => {
   const [reservas, setReservas] = useState<Reserva[]>([]);
@@ -21,6 +22,7 @@ const MinhasReservas = () => {
   //   null
   // );
   const [modalCancelarAberto, setModalCancelarAberto] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,11 +30,14 @@ const MinhasReservas = () => {
   }, []);
 
   const fetchReservas = async () => {
+    setLoading(true);
     try {
       const response = await getMinhasReservas();
       setReservas(response.data.conteudo);
+      setLoading(false);
     } catch {
       toast.error("Erro ao buscar salas");
+      setLoading(false);
     }
   };
 
@@ -55,16 +60,15 @@ const MinhasReservas = () => {
   // };
 
   const handleIrParaMinhasReservas = () => {
-    navigate("/reservar");
+    navigate("/reservar-ativos");
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Box p={4}>
-      <Box display="flex" alignItems="center" mb={4}>
-        <CalendarMonth sx={{ mr: 1 }} />
-        <Typography variant="h5">Minhas Reservas</Typography>
-      </Box>
-
       <Box
         display="flex"
         flexDirection="column"
@@ -72,6 +76,10 @@ const MinhasReservas = () => {
         maxWidth="800px"
         mx="auto"
       >
+        <Box display="flex" alignItems="center" mb={4}>
+          <CalendarMonth sx={{ mr: 1 }} />
+          <Typography variant="h5">Minhas Reservas</Typography>
+        </Box>
         {reservas.map((reserva) => (
           <ReservaItem key={reserva.id} reserva={reserva} />
         ))}

@@ -10,22 +10,30 @@ import {
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchIcon from "@mui/icons-material/Search";
-import CardReserva from "../../../components/card-reserva/card-reserva";
-import ModalConfirmar from "../../../components/modals/modal-confirmar";
-import { termoAtivos } from "../../../utils/termo";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import CardReserva from "../../../../components/card-reserva/card-reserva";
+import ModalConfirmar from "../../../../components/modals/modal-confirmar";
 import {
-  getAtivosDisponiveis,
+  getEquipamentosDisponiveis,
   getSalas,
   postReserva,
-} from "../../../services/reserva-service";
-import { Sala } from "../../../types/salas";
-import { AtivosDisponiveis } from "../../../types/ativos";
+} from "../../../../services/reserva-service";
+import { Sala } from "../../../../types/salas";
 import { toast } from "react-toastify";
+import Loading from "../../../../components/loading/loading";
+import { EquipamentosDisponiveis } from "../../../../types/equipamentos";
+import { termoEquipamentos } from "../../../../utils/termo";
+import ConfirmacaoReservaEquipamentos from "./confirmacao-reserva-equipamentos";
 
-const ReservarAtivos = () => {
+interface EquipamentoCriado {
+  equipamentoReservado: {
+    nome: string;
+    numeroPatrimonio: string;
+    tipoAtivoNome: string;
+    local?: string;
+  };
+}
+
+const ReservaEquipamentos = () => {
   const [openModal, setOpenModal] = useState(false);
   const [reservaConfirmada, setReservaConfirmada] = useState(false);
   const [salas, setSalas] = useState<Sala[]>([]);
@@ -35,8 +43,8 @@ const ReservarAtivos = () => {
     horaFim: false,
     salaId: false,
   });
-  const [ativosDisponiveis, setAtivosDisponiveis] = useState<
-    AtivosDisponiveis[]
+  const [equipamentosDisponiveis, setEquipamentosDisponiveis] = useState<
+    EquipamentosDisponiveis[]
   >([]);
   const [filtros, setFiltros] = useState({
     dia: "",
@@ -44,12 +52,12 @@ const ReservarAtivos = () => {
     horaFim: "",
     salaId: "",
   });
-  const [ativoSelecionadoId, setAtivoSelecionadoId] = useState<string | null>(
+  const [equipamentoSelecionadoId, setEquipamentoSelecionadoId] = useState<string | null>(
     null
   );
-  const [ativoReservado, setAtivoReservado] =
-    useState<AtivosDisponiveis | null>(null);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+    const [equipamentoCriado, setEquipamentoCriado] =
+      useState<EquipamentoCriado | null>(null);
 
   useEffect(() => {
     fetchSalas();
@@ -64,28 +72,31 @@ const ReservarAtivos = () => {
     }
   };
 
-  const fetchAtivosDisponiveis = async (
+  const fetchEquipamentosDisponiveis = async (
     dia: string,
     salaId: string,
     horaInicio: string,
     horaFim: string
   ) => {
+    setLoading(true);
     try {
-      const response = await getAtivosDisponiveis(
+      const response = await getEquipamentosDisponiveis(
         dia,
         salaId,
         horaInicio,
         horaFim
       );
-      setAtivosDisponiveis(response.data.conteudo);
+      setEquipamentosDisponiveis(response.data.conteudo);
+      setLoading(false);
     } catch {
-      toast.error("Erro ao buscar ativos disponíveis");
+      toast.error("Erro ao buscar equipamentos disponíveis");
+      setLoading(false);
     }
   };
 
   const handleSelecionar = (id: string) => {
     setOpenModal(true);
-    setAtivoSelecionadoId(id);
+    setEquipamentoSelecionadoId(id);
   };
 
   const handleCloseModal = () => {
@@ -93,7 +104,8 @@ const ReservarAtivos = () => {
   };
 
   const handleConfirmarTermo = async () => {
-    if (!ativoSelecionadoId) {
+    setLoading(true);
+    if (!equipamentoSelecionadoId) {
       toast.error("Nenhum ativo selecionado.");
       return;
     }
@@ -105,24 +117,28 @@ const ReservarAtivos = () => {
       horaInicio,
       horaFim,
       finalidade: "Apresentação de TCC",
-      ativoId: ativoSelecionadoId,
+      ativoId: equipamentoSelecionadoId,
     };
 
     try {
       await postReserva(reserva);
-      const ativoSelecionado = ativosDisponiveis.find(
-        (ativo) => ativo.id === ativoSelecionadoId
+      const equipamentoselecionado = equipamentosDisponiveis.find(
+        (ativo) => ativo.id === equipamentoSelecionadoId
       );
-      setAtivoReservado(ativoSelecionado || null);
       setOpenModal(false);
       setReservaConfirmada(true);
+      setEquipamentoCriado({
+        equipamentoReservado: {
+          nome: equipamentoselecionado?.nome || "",
+          numeroPatrimonio: equipamentoselecionado?.numeroPatrimonio || "",
+          tipoAtivoNome: equipamentoselecionado?.tipoAtivoNome || "",
+        },
+      });
+      setLoading(false);
     } catch {
       toast.error("Erro ao confirmar reserva.");
+      setLoading(false);
     }
-  };
-
-  const handleIrParaMinhasReservas = () => {
-    navigate("/minhas-reservas");
   };
 
   const handlePesquisar = () => {
@@ -144,48 +160,21 @@ const ReservarAtivos = () => {
     }
 
     toast.error(null);
-    fetchAtivosDisponiveis(dia, salaId, horaInicio, horaFim);
+    fetchEquipamentosDisponiveis(dia, salaId, horaInicio, horaFim);
   };
 
-  if (reservaConfirmada) {
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (reservaConfirmada && equipamentoCriado) {
     return (
-      <Box p={4} display="flex" flexDirection="column" gap={2} maxWidth="600px">
-        <Box display="flex" alignItems="center" mb={2} gap={1}>
-          <CheckCircleIcon color="success" />
-          <Typography variant="h6" color="success.main">
-            Reserva feita com sucesso!
-          </Typography>
-        </Box>
-
-        {ativoReservado && (
-          <CardReserva
-            imagem="https://www.iq.harvard.edu/sites/projects.iq.harvard.edu/files/styles/os_files_xlarge/public/harvard-iqss/files/k301_01.png?m=1714725215&itok=IGS1ojuR"
-            titulo={ativoReservado.nome}
-            subtitulo={`Código: ${ativoReservado.numeroPatrimonio}`}
-            localizacao="Laboratório de Redes Convergentes"
-          />
-        )}
-
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBackIcon />}
-            onClick={handleIrParaMinhasReservas}
-          >
-            Ir para minhas reservas
-          </Button>
-        </Box>
-      </Box>
+      <ConfirmacaoReservaEquipamentos equipamentoReservado={equipamentoCriado.equipamentoReservado} />
     );
   }
 
   return (
     <Box p={4}>
-      <Box display="flex" alignItems="center" mb={4}>
-        <CalendarMonthIcon sx={{ mr: 1 }} />
-        <Typography variant="h5">Reserva de Ativos</Typography>
-      </Box>
-
       <Box
         display="flex"
         flexDirection="column"
@@ -193,6 +182,10 @@ const ReservarAtivos = () => {
         maxWidth="800px"
         mx="auto"
       >
+        <Box display="flex" alignItems="center" mb={3}>
+          <CalendarMonthIcon sx={{ mr: 1 }} />
+          <Typography variant="h5">Reserva de Equipamentos</Typography>
+        </Box>
         <TextField
           label="Dia"
           type="date"
@@ -204,6 +197,11 @@ const ReservarAtivos = () => {
           slotProps={{
             inputLabel: {
               shrink: true,
+            },
+            input: {
+              inputProps: {
+                min: new Date().toISOString().split("T")[0],
+              },
             },
           }}
         />
@@ -285,7 +283,7 @@ const ReservarAtivos = () => {
         </Button>
 
         <Box mt={5}>
-          {ativosDisponiveis.map((ativo) => (
+          {equipamentosDisponiveis.map((ativo) => (
             <Box mt={3} key={ativo.id}>
               <CardReserva
                 imagem="https://www.iq.harvard.edu/sites/projects.iq.harvard.edu/files/styles/os_files_xlarge/public/harvard-iqss/files/k301_01.png?m=1714725215&itok=IGS1ojuR"
@@ -303,10 +301,10 @@ const ReservarAtivos = () => {
         open={openModal}
         onClose={handleCloseModal}
         onConfirm={handleConfirmarTermo}
-        termo={termoAtivos}
+        termo={termoEquipamentos}
       />
     </Box>
   );
 };
 
-export default ReservarAtivos;
+export default ReservaEquipamentos;

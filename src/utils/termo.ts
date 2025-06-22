@@ -1,4 +1,4 @@
-export const termoAtivos = `TERMO DE RESPONSABILIDADE - Uso de Ativos
+export const termoEquipamentos = `TERMO DE RESPONSABILIDADE - Uso de Ativos
 
 I – Criar termo.
 
