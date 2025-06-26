@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Typography,
   Dialog,
@@ -7,39 +7,35 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { Reserva } from "../../../types/reserva";
-import { toast } from "react-toastify";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../../components/loading/loading";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import CadastroItem from "../../../components/cadastro-item/cadastro-item";
-import { getGestaoAtivos } from "../../../services/cadastro-service";
 
 const GestaoAtivos = () => {
-  const [reservas, setReservas] = useState<Reserva[]>([]);
+  // const [reservas, setReservas] = useState<Reserva[]>([]);
   // const [reservaSelecionada, setReservaSelecionada] = useState<Reserva | null>(
   //   null
   // );
   const [modalCancelarAberto, setModalCancelarAberto] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchReservas();
-  }, []);
+  // useEffect(() => {
+  //   fetchReservas();
+  // }, []);
 
-  const fetchReservas = async () => {
-    setLoading(true);
-    try {
-      const response = await getGestaoAtivos();
-      setReservas(response.data.conteudo);
-      setLoading(false);
-    } catch {
-      toast.error("Erro ao buscar salas");
-      setLoading(false);
-    }
-  };
+  // const fetchReservas = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await getGestaoAtivos();
+  //     setReservas(response.data.conteudo);
+  //     setLoading(false);
+  //   } catch {
+  //     toast.error("Erro ao buscar salas");
+  //     setLoading(false);
+  //   }
+  // };
 
   // const handleCancelar = (reserva: Reserva) => {
   //   setReservaSelecionada(reserva);
@@ -63,9 +59,9 @@ const GestaoAtivos = () => {
     navigate("/cadastrar-ativos");
   };
 
-  if (loading) {
-    return <Loading />;
-  }
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <Box p={4} maxWidth="800px" mx="auto">
@@ -98,7 +94,7 @@ const GestaoAtivos = () => {
           id="B-456"
           disponibilidade={false}
           localizacao="Laboratório 2"
-          tipo="ativo"
+          tipo="equipamento"
           tipoAtivo="notebook"
         />
 
@@ -107,7 +103,7 @@ const GestaoAtivos = () => {
           id="B-61"
           disponibilidade={false}
           localizacao="Laboratório 3"
-          tipo="ativo"
+          tipo="equipamento"
           tipoAtivo="computador"
         />
 
@@ -116,7 +112,7 @@ const GestaoAtivos = () => {
           id="B-1"
           disponibilidade={false}
           localizacao="Laboratório 2"
-          tipo="ativo"
+          tipo="equipamento"
           tipoAtivo="projetor"
         />
 
