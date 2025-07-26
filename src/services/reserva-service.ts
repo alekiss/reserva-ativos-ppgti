@@ -20,7 +20,7 @@ export const getSalasDisponiveis = (
   );
 
 export const getEquipamentos = (salaId: string) =>
-  api.get(`/v1/ativos/equipamentos?salaId=${salaId}page=0&size=20`);
+  api.get(`/v1/ativos/equipamentos?salaId=${salaId}`);
 
 export const getEquipamentosDisponiveis = (
   dia: string,

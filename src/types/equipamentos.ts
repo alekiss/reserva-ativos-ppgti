@@ -22,3 +22,16 @@ export type EquipamentosDisponiveis = {
   numeroPatrimonio: string;
   pai: string | null;
 };
+
+export type Equipamentos = {
+  id: string;
+  nome: string;
+  disponivel: boolean;
+  status: string;
+  tipoAtivoNome: string;
+  capacidadePessoas: null | number;
+  numeroPatrimonio: string;
+  pai: string;
+  numeroSerie: string;
+  tipoAtivoId: string;
+};

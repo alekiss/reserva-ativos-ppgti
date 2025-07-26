@@ -21,3 +21,7 @@ export type CadastrarSalaResponse = {
   capacidadePessoas: number;
   tipoAtivoId: string;
 };
+
+export type SalaResponse = CadastrarSalaResponse & {
+  id?: string;
+};

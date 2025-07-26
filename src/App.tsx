@@ -14,13 +14,16 @@ import ReservarRotasLayout from "./routes/reservar-rotas-layout";
 import CadastrarRotasLayout from "./routes/cadastrar-rotas-layout";
 import Cadastrar from "./pages/fluxo-admin/cadastro-ativos/cadastrar";
 import CadastrarSalas from "./pages/fluxo-admin/cadastro-ativos/cadastrar-salas/cadastrar-salas";
-import Cadastros from "./pages/fluxo-admin/gestao-ativos/gestao-ativos";
 import CadastrarEquipamentos from "./pages/fluxo-admin/cadastro-ativos/cadastrar-equipamentos/cadastrar-equipamentos";
 import GestaoUsuarios from "./pages/fluxo-admin/gestao-usuarios/gestao-usuarios";
 import CadastroUsuarios from "./pages/fluxo-admin/cadastro-usuarios/cadastro-usuarios";
 import Reservar from "./pages/fluxo-usuario/reserva-ativos/reservar";
 import ReservarSalas from "./pages/fluxo-usuario/reserva-ativos/reservar-salas/reservar-salas";
 import ReservaEquipamentos from "./pages/fluxo-usuario/reserva-ativos/reservar-equipamentos/reservar-equipamentos";
+import GestaoAtivosLayout from "./routes/gestao-ativos-layout";
+import GestaoAtivos from "./pages/fluxo-admin/gestao-ativos/gestao-ativos";
+import GestaoSalas from "./pages/fluxo-admin/gestao-ativos/gestao-salas/gestao-salas";
+import GestaoEquipamentos from "./pages/fluxo-admin/gestao-ativos/gestao-equipamentos/gestao-equipamentos";
 
 function App() {
   return (
@@ -49,7 +52,12 @@ function App() {
                 <Route path="salas" element={<CadastrarSalas />} />
               </Route>
 
-              <Route path="/gestao-ativos" element={<Cadastros />} />
+              <Route path="/gestao-ativos" element={<GestaoAtivosLayout />}>
+                <Route index element={<GestaoAtivos />} />
+                <Route path="salas" element={<GestaoSalas />} />
+                <Route path="equipamentos" element={<GestaoEquipamentos />} />
+              </Route>
+
               <Route path="/gestao-usuarios" element={<GestaoUsuarios />} />
               <Route path="/cadastro-usuarios" element={<CadastroUsuarios /> }  />
               

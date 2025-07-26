@@ -1,8 +1,17 @@
-import { Box, Card, CardMedia, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardMedia,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { imagens } from "../../assets/imagens";
 import DoDisturbRoundedIcon from "@mui/icons-material/DoDisturbRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useState } from "react";
 interface CadastroItemProps {
   nome: string;
   id: string;
@@ -11,6 +20,8 @@ interface CadastroItemProps {
   tipo: "sala" | "equipamento";
   tipoAtivo?: "projetor" | "computador" | "notebook";
   capacidade?: number;
+  onEditar?: () => void
+  onDelete?: () => void;
 }
 
 const CadastroItem = ({
@@ -21,13 +32,33 @@ const CadastroItem = ({
   tipo,
   tipoAtivo,
   capacidade,
+  onEditar,
+  onDelete,
 }: CadastroItemProps) => {
   const key = tipo === "sala" ? "sala" : tipoAtivo ?? "computador";
   const imageSrc = imagens[key];
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleEdit = () => {
+    if (onEditar) onEditar();
+    handleMenuClose();
+  };
+  const handleDelete = () => {
+    onDelete?.();
+    handleMenuClose();
+  };
+
   return (
     <Card
       sx={{
+        position: "relative",
         display: "flex",
         mb: 2,
         borderRadius: 2,
@@ -38,10 +69,32 @@ const CadastroItem = ({
     >
       <CardMedia
         component="img"
-        sx={{ width: 290 }}
+        sx={{ width: 290, objectFit: "cover" }}
         image={imageSrc}
         alt={nome}
       />
+
+      <IconButton
+        aria-label="mais opções"
+        aria-controls={open ? "menu-cadastro-item" : undefined}
+        aria-haspopup="true"
+        onClick={handleMenuOpen}
+        sx={{ position: "absolute", top: 8, right: 8 }}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        id="menu-cadastro-item"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleMenuClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MenuItem onClick={handleEdit}>Editar</MenuItem>
+        <MenuItem onClick={handleDelete}>Deletar</MenuItem>
+      </Menu>
+
       <Box
         p={2}
         flex="1"
