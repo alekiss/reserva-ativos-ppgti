@@ -24,6 +24,7 @@ import GestaoAtivosLayout from "./routes/gestao-ativos-layout";
 import GestaoAtivos from "./pages/fluxo-admin/gestao-ativos/gestao-ativos";
 import GestaoSalas from "./pages/fluxo-admin/gestao-ativos/gestao-salas/gestao-salas";
 import GestaoEquipamentos from "./pages/fluxo-admin/gestao-ativos/gestao-equipamentos/gestao-equipamentos";
+import LoginForm from "./pages/login/login-form";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <ToastContainer />
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/login" element={<LoginForm />} />
             <Route element={<LayoutHeader />}>
               <Route path="/home" element={<Home />} />
 
