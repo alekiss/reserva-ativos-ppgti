@@ -19,7 +19,7 @@ const LayoutHeader = () => {
       <Header onToggleSidebar={onToggleSidebar} />
       <div className="content-area">
 
-         {role === "admin" ? (
+         {role === "ADMIN" ? (
           <SidebarAdmin collapsed={collapsed} />
         ) : (
           <Sidebar collapsed={collapsed} />

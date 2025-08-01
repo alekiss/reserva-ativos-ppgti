@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { me, logout, login } from "../services/auth-service";
 
-type Role = "admin" | "user";
+type Role = "ADMIN" | "ALUNO";
 type AuthContextType = {
   role: Role | null;
   setRole: (role: Role | null) => void;
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const loginFn = async (matricula: string, senha: string) => {
     await login(matricula, senha);
     const resp = await me();
-    setRole(resp.data.roles.includes("ADMIN") ? "admin" : "user");
+    setRole(resp.data.roles.includes("ADMIN") ? "ADMIN" : "ALUNO");
   };
 
   const logoutFn = async () => {
