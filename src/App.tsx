@@ -60,13 +60,14 @@ function App() {
               <Route path="/check-in-out" element={<CheckInOut />} />
 
               <Route
+                path="/cadastrar-ativos"
                 element={
                   <ProtectedRoute allowedRoles={["ADMIN"]}>
                     <CadastrarRotasLayout />
                   </ProtectedRoute>
                 }
               >
-                <Route path="/cadastrar-ativos" element={<Cadastrar />} />
+                <Route index element={<Cadastrar />} />
                 <Route path="equipamentos" element={<CadastrarEquipamentos />} />
                 <Route path="salas" element={<CadastrarSalas />} />
               </Route>

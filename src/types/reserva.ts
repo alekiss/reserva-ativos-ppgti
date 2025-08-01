@@ -25,3 +25,5 @@ export type DataReserva = {
   finalidade: string;
   ativoId: string;
 };
+
+export type ReservaRequest = DataReserva;

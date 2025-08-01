@@ -5,22 +5,30 @@ import {
   CardMedia,
   IconButton,
   Box,
-  Tooltip,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { ReservaItemProps } from "../../types/reserva";
+import { useState } from "react";
+import { Reserva } from "../../types/reserva";
 
-const ReservaItem = ({ reserva }: ReservaItemProps) => {
-  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // const open = Boolean(anchorEl);
+interface ReservaItemProps {
+  reserva: Reserva;
+  onEditar: (reserva: Reserva) => void;
+  onCancelar: (reserva: Reserva) => void;
+}
 
-  // const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+const ReservaItem = ({ reserva, onEditar, onCancelar }: ReservaItemProps) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-  // const handleMenuClose = () => {
-  //   setAnchorEl(null);
-  // };
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Card sx={{ display: "flex", mb: 2 }}>
@@ -44,14 +52,7 @@ const ReservaItem = ({ reserva }: ReservaItemProps) => {
         </CardContent>
       </Box>
       <Box sx={{ display: "flex", alignItems: "start", pr: 2, pt: 2 }}>
-        <Tooltip title="Funcionalidade em breve">
-          <span>
-            <IconButton disabled>
-              <MoreVertIcon />
-            </IconButton>
-          </span>
-        </Tooltip>
-         {/* <IconButton onClick={handleMenuOpen}>
+        <IconButton onClick={handleMenuOpen}>
           <MoreVertIcon />
         </IconButton>
         <Menu
@@ -67,9 +68,9 @@ const ReservaItem = ({ reserva }: ReservaItemProps) => {
             horizontal: "right",
           }}
         >
-          <MenuItem onClick={onEditar}>Editar</MenuItem>
-          <MenuItem onClick={onCancelar}>Cancelar Reserva</MenuItem>
-        </Menu> */}
+          <MenuItem onClick={() => { handleMenuClose(); onEditar(reserva); }}>Editar</MenuItem>
+          <MenuItem onClick={() => { handleMenuClose(); onCancelar(reserva); }} sx={{ color: 'error.main' }}>Cancelar Reserva</MenuItem>
+        </Menu>
       </Box>
     </Card>
   );
