@@ -25,6 +25,7 @@ import GestaoAtivos from "./pages/fluxo-admin/gestao-ativos/gestao-ativos";
 import GestaoSalas from "./pages/fluxo-admin/gestao-ativos/gestao-salas/gestao-salas";
 import GestaoEquipamentos from "./pages/fluxo-admin/gestao-ativos/gestao-equipamentos/gestao-equipamentos";
 import LoginForm from "./pages/login/login-form";
+import ProtectedRoute from "./context/require-auth";
 
 function App() {
   return (
@@ -36,33 +37,64 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<LoginForm />} />
-            <Route element={<LayoutHeader />}>
-              <Route path="/home" element={<Home />} />
 
+            <Route
+              element={
+                <ProtectedRoute>
+                  <LayoutHeader />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/home" element={<Home />} />
               <Route path="/reservar-ativos" element={<ReservarRotasLayout />}>
                 <Route index element={<Reservar />} />
                 <Route path="equipamentos" element={<ReservaEquipamentos />} />
                 <Route path="salas" element={<ReservarSalas />} />
               </Route>
-
               <Route path="/minhas-reservas" element={<MinhasReservas />} />
               <Route path="/check-in-out" element={<CheckInOut />} />
 
-              <Route path="/cadastrar-ativos" element={<CadastrarRotasLayout />}>
-                <Route index element={<Cadastrar />} />
+              <Route
+                element={
+                  <ProtectedRoute allowedRoles={["ADMIN"]}>
+                    <CadastrarRotasLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route path="/cadastrar-ativos" element={<Cadastrar />} />
                 <Route path="equipamentos" element={<CadastrarEquipamentos />} />
                 <Route path="salas" element={<CadastrarSalas />} />
               </Route>
 
-              <Route path="/gestao-ativos" element={<GestaoAtivosLayout />}>
+              <Route
+                path="/gestao-ativos"
+                element={
+                  <ProtectedRoute allowedRoles={["ADMIN"]}>
+                    <GestaoAtivosLayout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route index element={<GestaoAtivos />} />
                 <Route path="salas" element={<GestaoSalas />} />
                 <Route path="equipamentos" element={<GestaoEquipamentos />} />
               </Route>
 
-              <Route path="/gestao-usuarios" element={<GestaoUsuarios />} />
-              <Route path="/cadastro-usuarios" element={<CadastroUsuarios /> }  />
-              
+              <Route
+                path="/gestao-usuarios"
+                element={
+                  <ProtectedRoute allowedRoles={["ADMIN"]}>
+                    <GestaoUsuarios />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/cadastro-usuarios"
+                element={
+                  <ProtectedRoute allowedRoles={["ADMIN"]}>
+                    <CadastroUsuarios />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
           </Routes>
         </BrowserRouter>
