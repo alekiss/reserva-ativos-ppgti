@@ -38,7 +38,7 @@ const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
   };
 
   const navItems = [
-    { text: "Home", icon: Home, path: "/home", disabled: true },
+    { text: "Home", icon: Home, path: "/home-admin", disabled: false },
     {
       text: "Cadastro de Ativos",
       icon: AddCircle,

@@ -31,3 +31,6 @@ export const getEquipamentosDisponiveis = (
   api.get(
     `/v1/ativos/equipamentos/disponiveis?salaId=${salaId}&dia=${dia}&horaInicio=${horaInicio}&horaFim=${horaFim}`
   );
+
+export const getReservasId = (id: string) =>
+  api.get(`/v1/reservas/usuario/${id}`);

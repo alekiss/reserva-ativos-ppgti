@@ -11,7 +11,7 @@ type ModalDeleteProps = {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  type: "sala" | "equipamento";
+  type: "sala" | "equipamento" | "usuario";
   nome?: string;
 };
 
@@ -22,16 +22,23 @@ const ModalDelete = ({
   type,
   nome,
 }: ModalDeleteProps) => {
-  const title = `Excluir ${type === "sala" ? "Sala" : "Equipamento"}`;
-  const message = `Tem certeza que deseja excluir ${
-    type === "sala" ? "a sala" : "o equipamento"
-  }${nome ? ` "${nome}"` : ""}? Esta ação não pode ser desfeita.`;
+  const titles = {
+    sala: "Excluir Sala",
+    equipamento: "Excluir Equipamento",
+    usuario: "Excluir Usuário",
+  };
+
+  const messages = {
+    sala: `Tem certeza que deseja excluir a sala "${nome}"? Esta ação não pode ser desfeita.`,
+    equipamento: `Tem certeza que deseja excluir o equipamento "${nome}"? Esta ação não pode ser desfeita.`,
+    usuario: `Tem certeza que deseja excluir o usuário "${nome}"? Esta ação não pode ser desfeita.`,
+  };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>{titles[type]}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{message}</DialogContentText>
+        <DialogContentText>{messages[type]}</DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: 2, pb: 2 }}>
         <Button onClick={onClose}>Cancelar</Button>

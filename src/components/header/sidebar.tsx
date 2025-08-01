@@ -40,8 +40,8 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
     {
       text: "Home",
       icon: <Home />,
-      path: "/home",
-      disabled: true,
+      path: "/home-aluno",
+      disabled: false,
     },
     {
       text: "Reservar",

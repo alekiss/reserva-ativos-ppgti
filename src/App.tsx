@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/home/home";
 import LayoutHeader from "./components/layout-header/layout-header";
 import CheckInOut from "./pages/fluxo-usuario/check-in-out/check-in-out";
 import MinhasReservas from "./pages/fluxo-usuario/minhas-reservas/minhas-reservas";
@@ -26,6 +25,9 @@ import GestaoSalas from "./pages/fluxo-admin/gestao-ativos/gestao-salas/gestao-s
 import GestaoEquipamentos from "./pages/fluxo-admin/gestao-ativos/gestao-equipamentos/gestao-equipamentos";
 import LoginForm from "./pages/login/login-form";
 import ProtectedRoute from "./context/require-auth";
+import HomeAluno from "./pages/home/home-aluno";
+import HomeAdmin from "./pages/home/home-admin";
+import HomePage from "./pages/home/home-page";
 
 function App() {
   return (
@@ -45,7 +47,10 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              <Route path="/home" element={<Home />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/home-aluno" element={<HomeAluno />} />
+              <Route path="/home-admin" element={<HomeAdmin />} />
+
               <Route path="/reservar-ativos" element={<ReservarRotasLayout />}>
                 <Route index element={<Reservar />} />
                 <Route path="equipamentos" element={<ReservaEquipamentos />} />

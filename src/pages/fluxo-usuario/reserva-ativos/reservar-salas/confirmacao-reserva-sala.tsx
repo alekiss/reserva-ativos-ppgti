@@ -3,17 +3,13 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import { Sala } from "../../../../types/salas";
 
 interface Props {
-  equipamentoReservado: {
-    nome: string;
-    numeroPatrimonio: string;
-    tipoAtivoNome: string;
-    local?: string;
-  };
+  salaReservada: Sala;
 }
 
-const ConfirmacaoReservaEquipamentos = ({ equipamentoReservado }: Props) => {
+const ConfirmacaoReservaSalas = ({ salaReservada }: Props) => {
   const navigate = useNavigate();
 
   return (
@@ -36,7 +32,7 @@ const ConfirmacaoReservaEquipamentos = ({ equipamentoReservado }: Props) => {
           Sucesso!
         </Typography>
         <Typography color="text.secondary">
-          Seu equipamento foi reservado com sucesso.
+          Sua sala foi reservada com sucesso.
         </Typography>
       </Stack>
 
@@ -46,18 +42,17 @@ const ConfirmacaoReservaEquipamentos = ({ equipamentoReservado }: Props) => {
       >
         <Box p={3}>
           <Typography variant="h6" gutterBottom>
-            {equipamentoReservado.nome}
+            {salaReservada.nome}
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Typography variant="body2">
-            <strong>Número de Patrimônio:</strong> {equipamentoReservado.numeroPatrimonio}
+            <strong>Número de Patrimônio:</strong> {salaReservada.numeroPatrimonio}
           </Typography>
           <Typography variant="body2">
-            <strong>Número de Série:</strong> {equipamentoReservado.tipoAtivoNome}
+            <strong>Localização:</strong> {salaReservada.pai || "Não informada"}
           </Typography>
           <Typography variant="body2">
-            <strong>Localização:</strong>{" "}
-            {equipamentoReservado.local || "Não informada"}
+            <strong>Capacidade:</strong> {salaReservada.capacidadePessoas || "Não informada"}
           </Typography>
         </Box>
       </Paper>
@@ -105,4 +100,4 @@ const ConfirmacaoReservaEquipamentos = ({ equipamentoReservado }: Props) => {
   );
 };
 
-export default ConfirmacaoReservaEquipamentos;
+export default ConfirmacaoReservaSalas;

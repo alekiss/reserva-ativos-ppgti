@@ -9,7 +9,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CardReserva from "../../../../components/card-reserva/card-reserva";
 import { useState } from "react";
 import ModalConfirmar from "../../../../components/modals/modal-confirmar";
-import { termoEquipamentos } from "../../../../utils/termo";
+import { termoSalas } from "../../../../utils/termo";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchIcon from "@mui/icons-material/Search";
 import { toast } from "react-toastify";
@@ -18,9 +18,7 @@ import {
   postReserva,
 } from "../../../../services/reserva-service";
 import { Sala } from "../../../../types/salas";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import ConfirmacaoReservaSalas from "./confirmacao-reserva-sala";
 
 const ReservarSalas = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -40,7 +38,6 @@ const ReservarSalas = () => {
   );
   const [reservaConfirmada, setReservaConfirmada] = useState(false);
   const [salaReservada, setSalaReservada] = useState<Sala | null>(null);
-  const navigate = useNavigate();
 
   const handleSelecionar = (id: string) => {
     setOpenModal(true);
@@ -114,40 +111,8 @@ const ReservarSalas = () => {
     fetchSalasDisponiveis(dia, horaInicio, horaFim);
   };
 
-  const handleIrParaMinhasReservas = () => {
-    navigate("/minhas-reservas");
-  };
-
-  if (reservaConfirmada) {
-    return (
-      <Box p={4} display="flex" flexDirection="column" gap={2} maxWidth="600px">
-        <Box display="flex" alignItems="center" mb={2} gap={1}>
-          <CheckCircleIcon color="success" />
-          <Typography variant="h6" color="success.main">
-            Reserva feita com sucesso!
-          </Typography>
-        </Box>
-
-        {salaReservada && (
-          <CardReserva
-            imagem="https://www.iq.harvard.edu/sites/projects.iq.harvard.edu/files/styles/os_files_xlarge/public/harvard-iqss/files/k301_01.png?m=1714725215&itok=IGS1ojuR"
-            titulo={salaReservada.nome}
-            subtitulo={`Código: ${salaReservada.numeroPatrimonio}`}
-            localizacao="Laboratório de Redes Convergentes"
-          />
-        )}
-
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBackIcon />}
-            onClick={handleIrParaMinhasReservas}
-          >
-            Ir para minhas reservas
-          </Button>
-        </Box>
-      </Box>
-    );
+  if (reservaConfirmada && salaReservada) {
+    return <ConfirmacaoReservaSalas salaReservada={salaReservada} />;
   }
 
   return (
@@ -270,7 +235,7 @@ const ReservarSalas = () => {
         open={openModal}
         onClose={handleCloseModal}
         onConfirm={handleConfirmarTermo}
-        termo={termoEquipamentos}
+        termo={termoSalas}
       />
     </Box>
   );
