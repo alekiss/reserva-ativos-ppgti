@@ -46,7 +46,6 @@ const CadastroUsuarios = () => {
   });
 
   const onSubmit = (data: CadastroUsuarioRequest) => {
-    // Ajusta o perfil para ser um array de um único item
     const usuarioParaCriar = {
       ...data,
       perfis: Array.isArray(data.perfis) ? data.perfis : [data.perfis],
@@ -141,12 +140,11 @@ const CadastroUsuarios = () => {
               {...field}
               select
               label="Perfis"
-              // Removido SelectProps={{ multiple: true }}
               error={!!errors.perfis}
               helperText={(errors.perfis?.message as string) || ""}
               fullWidth
-              value={field.value[0] || ""} // Ajusta o valor para ser uma string
-              onChange={(e) => field.onChange([e.target.value])} // Envia o valor como um array
+              value={field.value[0] || ""}
+              onChange={(e) => field.onChange([e.target.value])}
             >
               {perfisPossiveis.map((r) => (
                 <MenuItem key={r} value={r}>

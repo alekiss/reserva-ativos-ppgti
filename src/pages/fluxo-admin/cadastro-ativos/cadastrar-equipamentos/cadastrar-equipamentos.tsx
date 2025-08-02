@@ -58,10 +58,13 @@ const CadastrarEquipamentos = () => {
   }, []);
 
   const listaSalas = async () => {
+    setLoading(true);
     try {
       const response = await getSalas();
       setSalas(response.data.conteudo);
+      setLoading(false);
     } catch {
+      setLoading(false);
       toast.error("Erro ao buscar salas");
     }
   };

@@ -17,12 +17,16 @@ import ModalConfirmarCadastro from "../../../../components/modals/modal-confirma
 import ConfirmacaoCadastroSalas from "./confirmacao-cadastro-salas";
 import { TipoConfirmacao } from "../../../../types/tipo-confirmacao";
 import { TipoSalasProps } from "../../../../types/salas";
-import { getTiposSalas, portCadastrarSala } from "../../../../services/cadastro-service";
+import {
+  getTiposSalas,
+  portCadastrarSala,
+} from "../../../../services/cadastro-service";
+import Loading from "../../../../components/loading/loading";
 
 interface SalaCriada {
-    nome: string;
-    local: string;
-    capacidade: string;
+  nome: string;
+  local: string;
+  capacidade: string;
 }
 
 const CadastrarSalas = () => {
@@ -38,6 +42,7 @@ const CadastrarSalas = () => {
   const [sucesso, setSucesso] = useState(false);
   const [salaCriada, setSalaCriada] = useState<SalaCriada | null>(null);
   const [tiposSalasId, setTiposSalasId] = useState<TipoSalasProps[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     tiposSalasLista();
@@ -78,40 +83,40 @@ const CadastrarSalas = () => {
     setOpenModal(true);
   };
 
-    const handleCadastrarSala = async () => {
-      const {
-        nomeSala,
-        disponivel,
-        bloco,
-        capacidade,
-        tipoSalasId
-      } = filtros;
-  
-      const cadastro = {
-        nome: nomeSala,
-        disponivel: disponivel === "sim",
-        bloco,
-        capacidadePessoas: Number(capacidade),
-        tipoAtivoId: tipoSalasId
-,
-      };
-  
-      try {
-        await portCadastrarSala(cadastro);
-        setSucesso(true);
-        setOpenModal(false);
-        setSalaCriada({
-          nome: nomeSala,
-          local: bloco,
-          capacidade: capacidade,
-        });
-      } catch {
-        toast.error("Erro ao confirmar cadastro.");
-      }
+  const handleCadastrarSala = async () => {
+    setLoading(true);
+    const { nomeSala, disponivel, bloco, capacidade, tipoSalasId } = filtros;
+
+    const cadastro = {
+      nome: nomeSala,
+      disponivel: disponivel === "sim",
+      bloco,
+      capacidadePessoas: Number(capacidade),
+      tipoAtivoId: tipoSalasId,
     };
+
+    try {
+      await portCadastrarSala(cadastro);
+      setSucesso(true);
+      setOpenModal(false);
+      setSalaCriada({
+        nome: nomeSala,
+        local: bloco,
+        capacidade: capacidade,
+      });
+      setLoading(false);
+    } catch {
+      setLoading(false);
+      toast.error("Erro ao confirmar cadastro.");
+    }
+  };
 
   if (sucesso && salaCriada) {
     return <ConfirmacaoCadastroSalas salaReservada={salaCriada} />;
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (
